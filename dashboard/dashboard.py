@@ -43,6 +43,14 @@ def create_bike_users_holiday(df):
     })
     return bike_users_holiday_df
 
+def create_bike_users_season(df):
+    bike_users_season_df = df.groupby(by=['season']).agg({
+        "casual": "sum",
+        "registered": "sum",
+        "cnt": "sum"
+    })
+    return bike_users_season_df
+
 st.header('Bike Sharing Dashboard :bicyclist:')
 st.subheader('Total Users')
 
