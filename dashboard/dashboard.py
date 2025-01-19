@@ -11,7 +11,7 @@ def create_bike_users_daily_df(df):
     }).reset_index()
     return bike_users_daily_df
 
-st.header('Bike Sharing Dashboard')
+st.header('Bike Sharing Dashboard :bicyclist:')
 st.subheader('Total Users')
 
 with st.sidebar:
