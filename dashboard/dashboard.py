@@ -19,6 +19,14 @@ def create_bike_users_weekly_df(df):
     }).reindex(weekday_order)
     return weekly_users_daily_df
 
+def create_bike_users_hourly(df):
+    bike_users_hourly_df = df.groupby(by=['hr']).agg({
+        "casual": "sum",
+        "registered": "sum",
+        "cnt": "sum"
+    })
+    return bike_users_hourly_df
+
 st.header('Bike Sharing Dashboard :bicyclist:')
 st.subheader('Total Users')
 
