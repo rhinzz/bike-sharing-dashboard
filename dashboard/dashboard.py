@@ -51,6 +51,15 @@ def create_bike_users_season(df):
     })
     return bike_users_season_df
 
+def create_bike_users_weather(df):
+    bike_users_weather_df = df.groupby(by=['weather']).agg({
+        "casual": "sum",
+        "registered": "sum",
+        "cnt": "sum"
+    })
+    return bike_users_weather_df
+    
+
 st.header('Bike Sharing Dashboard :bicyclist:')
 st.subheader('Total Users')
 
