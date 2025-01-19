@@ -27,6 +27,14 @@ def create_bike_users_hourly(df):
     })
     return bike_users_hourly_df
 
+def create_bike_users_working_day(df):
+    bike_users_working_day_df = df.groupby(by=['workingday']).agg({
+        "casual": "sum",
+        "registered": "sum",
+        "cnt": "sum"
+    })
+    return bike_users_working_day_df
+
 st.header('Bike Sharing Dashboard :bicyclist:')
 st.subheader('Total Users')
 
