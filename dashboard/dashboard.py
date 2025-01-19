@@ -5,7 +5,7 @@ import streamlit as st
 sns.set_theme(style='dark')
 
 def create_bike_users_daily_df(df):
-    bike_users_daily_df = all_df.groupby(by=['dteday']).agg({
+    bike_users_daily_df = df.groupby(by=['dteday']).agg({
         "casual_day": "sum",
         "registered_day": "sum",
     }).reset_index()
