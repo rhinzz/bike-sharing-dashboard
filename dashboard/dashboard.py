@@ -121,6 +121,9 @@ bike_users_weekly_df = create_bike_users_weekly_df(main_df)
 bike_users_monthly_df = create_bike_users_monthly_df(main_df)
 bike_users_working_day_df = create_bike_users_working_day_df(main_df)
 bike_users_holiday_df = create_bike_users_holiday_df(main_df)
+bike_users_season_df = create_bike_users_season_df(main_df)
+bike_users_weather_df = create_bike_users_weather_df(main_df)
+bike_users_temp_df = create_bike_users_temp_df(main_df)
 
 col1, col2 = st.columns(2)
 with col1:
