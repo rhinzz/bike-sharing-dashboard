@@ -215,6 +215,30 @@ ax.tick_params(axis='x', labelsize=30)
 
 st.pyplot(fig)
 
+st.subheader('Monthly Trend')
+if choice == 'All':
+    peak_month = bike_users_monthly_df.loc[bike_users_monthly_df['cnt'].idxmax(), 'mnth']
+elif choice == 'Registered':
+    peak_month = bike_users_monthly_df.loc[bike_users_monthly_df['registered'].idxmax(), 'mnth']
+else:
+    peak_month = bike_users_monthly_df.loc[bike_users_monthly_df['casual'].idxmax(), 'mnth']
+st.metric("Peak month", value=peak_month.capitalize())
+
+fig, ax = plt.subplots(figsize=(30, 10))
+if choice == 'All':
+    sns.barplot(x="mnth", y="cnt", data=bike_users_monthly_df,ax=ax)
+elif choice == 'Registered':
+    sns.barplot(x="mnth", y="registered", data=bike_users_monthly_df,ax=ax)
+else:
+    sns.barplot(x="mnth", y="casual", data=bike_users_monthly_df,ax=ax)
+
+ax.set_xlabel(None)
+ax.set_ylabel(None)
+ax.tick_params(axis='y', labelsize=30)
+ax.tick_params(axis='x', labelsize=30)
+
+st.pyplot(fig)
+
 st.subheader('Bike Sharing Usage Based on Day Type')
 fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(30, 10))
 if choice == 'All':
