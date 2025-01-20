@@ -23,9 +23,10 @@ def create_bike_users_hourly_df(df):
 def create_bike_users_weekly_df(df):
     weekday_order = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
     bike_users_weekly_df = df.groupby(by=['weekday']).agg({
-        "casual_day": "sum",
-        "registered_day": "sum",
-    }).reindex(weekday_order)
+        "casual": "sum",
+        "registered": "sum",
+        "cnt": "sum"
+    }).reindex(weekday_order).reset_index()
     return bike_users_weekly_df
 
 def create_bike_users_monthly_df(df):
@@ -181,6 +182,28 @@ elif choice == 'Registered':
     sns.barplot(x="hr", y="registered", data=bike_users_hourly_df,ax=ax)
 else:
     sns.barplot(x="hr", y="casual", data=bike_users_hourly_df,ax=ax)
+
+ax.tick_params(axis='y', labelsize=20)
+ax.tick_params(axis='x', labelsize=20)
+
+st.pyplot(fig)
+
+st.subheader('Weekly Trend')
+if choice == 'All':
+    peak_day = bike_users_weekly_df.loc[bike_users_weekly_df['cnt'].idxmax(), 'weekday']
+elif choice == 'Registered':
+    peak_day = bike_users_weekly_df.loc[bike_users_weekly_df['registered'].idxmax(), 'weekday']
+else:
+    peak_day = bike_users_weekly_df.loc[bike_users_weekly_df['casual'].idxmax(), 'weekday']
+st.metric("Peak day", value=peak_day.capitalize())
+
+fig, ax = plt.subplots(figsize=(30, 10))
+if choice == 'All':
+    sns.barplot(x="weekday", y="cnt", data=bike_users_weekly_df,ax=ax)
+elif choice == 'Registered':
+    sns.barplot(x="weekday", y="registered", data=bike_users_weekly_df,ax=ax)
+else:
+    sns.barplot(x="weekday", y="casual", data=bike_users_weekly_df,ax=ax)
     
 ax.tick_params(axis='y', labelsize=20)
 ax.tick_params(axis='x', labelsize=20)
