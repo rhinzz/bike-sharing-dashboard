@@ -4,6 +4,14 @@ import seaborn as sns
 import streamlit as st
 sns.set_theme(style='dark')
 
+def create_bike_users_hourly(df):
+    bike_users_hourly_df = df.groupby(by=['hr']).agg({
+        "casual": "sum",
+        "registered": "sum",
+        "cnt": "sum"
+    })
+    return bike_users_hourly_df
+
 def create_bike_users_daily_df(df):
     bike_users_daily_df = df.groupby(by=['dteday']).agg({
         "casual_day": "sum",
@@ -18,14 +26,6 @@ def create_bike_users_weekly_df(df):
         "registered_day": "sum",
     }).reindex(weekday_order)
     return weekly_users_daily_df
-
-def create_bike_users_hourly(df):
-    bike_users_hourly_df = df.groupby(by=['hr']).agg({
-        "casual": "sum",
-        "registered": "sum",
-        "cnt": "sum"
-    })
-    return bike_users_hourly_df
 
 def create_bike_users_working_day(df):
     bike_users_working_day_df = df.groupby(by=['workingday']).agg({
