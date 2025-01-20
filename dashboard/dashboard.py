@@ -90,5 +90,12 @@ all_df.reset_index(inplace=True)
 st.header('Bike Sharing Dashboard :bicyclist:')
 st.subheader('Total Users')
 
+min_date = all_df["dteday"].min()
+max_date = all_df["dteday"].max()
+
 with st.sidebar:
-    pass
+    start_date, end_date = st.date_input(
+        label='Rentang Waktu',min_value=min_date,
+        max_value=max_date,
+        value=[min_date, max_date]
+    )
