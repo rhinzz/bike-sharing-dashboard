@@ -143,26 +143,25 @@ with col2:
 
 # Daily Trend
 fig, ax = plt.subplots(figsize=(30, 10))
-if choice == 'Casual':
+if choice == 'All':
     ax.plot(
         bike_users_daily_df["dteday"],
-        bike_users_daily_df["casual_day"],
+        bike_users_daily_df["cnt_day"],
         linewidth=2.5,
-        color="#90CAF9"
+        color="orange"
     )
 elif choice == 'Registered':
     ax.plot(
         bike_users_daily_df["dteday"],
         bike_users_daily_df["registered_day"],
         linewidth=2.5,
-        color="#90CAF9"
+        color="#456A50"
     )
 else:
     ax.plot(
         bike_users_daily_df["dteday"],
-        bike_users_daily_df["cnt_day"],
+        bike_users_daily_df["casual_day"],
         linewidth=2.5,
-        color="#90CAF9"
     )
 ax.tick_params(axis='y', labelsize=20)
 ax.tick_params(axis='x', labelsize=20)
@@ -173,19 +172,25 @@ st.pyplot(fig)
 st.subheader('Hourly Trend')
 if choice == 'All':
     peak_hour = bike_users_hourly_df.loc[bike_users_hourly_df['cnt'].idxmax(), 'hr']
+    color_column = 'cnt'
+    base_color = "#F9CA77"
+    highlight_color = "orange"
 elif choice == 'Registered':
     peak_hour = bike_users_hourly_df.loc[bike_users_hourly_df['registered'].idxmax(), 'hr']
+    color_column = 'registered'
+    base_color = "#7DB17D"
+    highlight_color = "#3F704D"
 else:
     peak_hour = bike_users_hourly_df.loc[bike_users_hourly_df['casual'].idxmax(), 'hr']
+    color_column = 'casual'
+    base_color = "#5975A4"
+    highlight_color = "#2E4E7E"
+
 st.metric("Peak hour", value=peak_hour)
 
 fig, ax = plt.subplots(figsize=(30, 10))
-if choice == 'All':
-    sns.barplot(x="hr", y="cnt", data=bike_users_hourly_df,ax=ax)
-elif choice == 'Registered':
-    sns.barplot(x="hr", y="registered", data=bike_users_hourly_df,ax=ax)
-else:
-    sns.barplot(x="hr", y="casual", data=bike_users_hourly_df,ax=ax)
+colors = [highlight_color if hr == peak_hour else base_color for hr in bike_users_hourly_df['hr']]
+sns.barplot(x="hr", y=color_column, data=bike_users_hourly_df, palette=colors, ax=ax)
 
 ax.tick_params(axis='y', labelsize=30)
 ax.tick_params(axis='x', labelsize=30)
@@ -196,19 +201,26 @@ st.pyplot(fig)
 st.subheader('Weekly Trend')
 if choice == 'All':
     peak_day = bike_users_weekly_df.loc[bike_users_weekly_df['cnt'].idxmax(), 'weekday']
+    color_column = 'cnt'
+    base_color = "#F9CA77"
+    highlight_color = "orange"
 elif choice == 'Registered':
     peak_day = bike_users_weekly_df.loc[bike_users_weekly_df['registered'].idxmax(), 'weekday']
+    color_column = 'registered'
+    base_color = "#7DB17D"
+    highlight_color = "#3F704D"
 else:
     peak_day = bike_users_weekly_df.loc[bike_users_weekly_df['casual'].idxmax(), 'weekday']
+    color_column = 'casual'
+    base_color = "#5975A4"
+    highlight_color = "#2E4E7E"
+
 st.metric("Peak day", value=peak_day.capitalize())
 
 fig, ax = plt.subplots(figsize=(30, 10))
-if choice == 'All':
-    sns.barplot(x="weekday", y="cnt", data=bike_users_weekly_df,ax=ax)
-elif choice == 'Registered':
-    sns.barplot(x="weekday", y="registered", data=bike_users_weekly_df,ax=ax)
-else:
-    sns.barplot(x="weekday", y="casual", data=bike_users_weekly_df,ax=ax)
+colors = [highlight_color if day == peak_day else base_color for day in bike_users_weekly_df['weekday']]
+
+sns.barplot(x="weekday", y=color_column, data=bike_users_weekly_df, palette=colors, ax=ax)
 
 ax.set_xlabel(None)
 ax.set_ylabel(None)
@@ -221,19 +233,26 @@ st.pyplot(fig)
 st.subheader('Monthly Trend')
 if choice == 'All':
     peak_month = bike_users_monthly_df.loc[bike_users_monthly_df['cnt'].idxmax(), 'mnth']
+    color_column = 'cnt'
+    base_color = "#F9CA77"
+    highlight_color = "orange"
 elif choice == 'Registered':
     peak_month = bike_users_monthly_df.loc[bike_users_monthly_df['registered'].idxmax(), 'mnth']
+    color_column = 'registered'
+    base_color = "#7DB17D"
+    highlight_color = "#3F704D"
 else:
     peak_month = bike_users_monthly_df.loc[bike_users_monthly_df['casual'].idxmax(), 'mnth']
+    color_column = 'casual'
+    base_color = "#5975A4"
+    highlight_color = "#2E4E7E"
+
 st.metric("Peak month", value=peak_month.capitalize())
 
 fig, ax = plt.subplots(figsize=(30, 10))
-if choice == 'All':
-    sns.barplot(x="mnth", y="cnt", data=bike_users_monthly_df,ax=ax)
-elif choice == 'Registered':
-    sns.barplot(x="mnth", y="registered", data=bike_users_monthly_df,ax=ax)
-else:
-    sns.barplot(x="mnth", y="casual", data=bike_users_monthly_df,ax=ax)
+colors = [highlight_color if month == peak_month else base_color for month in bike_users_monthly_df['mnth']]
+
+sns.barplot(x="mnth", y=color_column, data=bike_users_monthly_df, palette=colors, ax=ax)
 
 ax.set_xlabel(None)
 ax.set_ylabel(None)
@@ -246,14 +265,14 @@ st.pyplot(fig)
 st.subheader('Bike Sharing Usage Based on Day Type')
 fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(30, 10))
 if choice == 'All':
-    sns.barplot(x="workingday", y="cnt", data=bike_users_working_day_df,ax=ax[0])
-    sns.barplot(x="holiday", y="cnt", data=bike_users_holiday_df,ax=ax[1])
+    sns.barplot(x="workingday", y="cnt", data=bike_users_working_day_df,color= "orange",ax=ax[0])
+    sns.barplot(x="holiday", y="cnt", data=bike_users_holiday_df,color= "orange",ax=ax[1])
 elif choice == 'Registered':
-    sns.barplot(x="workingday", y="registered", data=bike_users_working_day_df,ax=ax[0])
-    sns.barplot(x="holiday", y="registered", data=bike_users_holiday_df,ax=ax[1])
+    sns.barplot(x="workingday", y="registered", data=bike_users_working_day_df,color= "#456A50",ax=ax[0])
+    sns.barplot(x="holiday", y="registered", data=bike_users_holiday_df, color= "#456A50",ax=ax[1])
 else:
-    sns.barplot(x="workingday", y="casual", data=bike_users_working_day_df,ax=ax[0])
-    sns.barplot(x="holiday", y="casual", data=bike_users_holiday_df,ax=ax[1])
+    sns.barplot(x="workingday", y="casual", data=bike_users_working_day_df,color='#385074',ax=ax[0])
+    sns.barplot(x="holiday", y="casual", data=bike_users_holiday_df,color='#385074',ax=ax[1])
 
 ax[0].set_xlabel(None)
 ax[0].set_ylabel(None)
@@ -273,19 +292,26 @@ st.pyplot(fig)
 st.subheader('Seasonal Trend')
 if choice == 'All':
     peak_season = bike_users_season_df.loc[bike_users_season_df['cnt'].idxmax(), 'season']
+    color_column = 'cnt'
+    base_color = "#F9CA77"
+    highlight_color = "orange"
 elif choice == 'Registered':
     peak_season = bike_users_season_df.loc[bike_users_season_df['registered'].idxmax(), 'season']
+    color_column = 'registered'
+    base_color = "#7DB17D"
+    highlight_color = "#3F704D"
 else:
     peak_season = bike_users_season_df.loc[bike_users_season_df['casual'].idxmax(), 'season']
+    color_column = 'casual'
+    base_color = "#5975A4"
+    highlight_color = "#2E4E7E"
+
 st.metric("Peak season", value=peak_season.capitalize())
 
 fig, ax = plt.subplots(figsize=(30, 10))
-if choice == 'All':
-    sns.barplot(x="season", y="cnt", data=bike_users_season_df,ax=ax)
-elif choice == 'Registered':
-    sns.barplot(x="season", y="registered", data=bike_users_season_df,ax=ax)
-else:
-    sns.barplot(x="season", y="casual", data=bike_users_season_df,ax=ax)
+colors = [highlight_color if season == peak_season else base_color for season in bike_users_season_df['season']]
+
+sns.barplot(x="season", y=color_column, data=bike_users_season_df, palette=colors, ax=ax)
 
 ax.set_xlabel(None)
 ax.set_ylabel(None)
@@ -298,19 +324,26 @@ st.pyplot(fig)
 st.subheader('Weather Trend')
 if choice == 'All':
     peak_weather = bike_users_weather_df.loc[bike_users_weather_df['cnt'].idxmax(), 'weathersit']
+    color_column = 'cnt'
+    base_color = "#F9CA77"
+    highlight_color = "orange"
 elif choice == 'Registered':
     peak_weather = bike_users_weather_df.loc[bike_users_weather_df['registered'].idxmax(), 'weathersit']
+    color_column = 'registered'
+    base_color = "#7DB17D"
+    highlight_color = "#3F704D"
 else:
-    peak_weather = bike_users_weather_df.loc[bike_users_season_df['casual'].idxmax(), 'weathersit']
+    peak_weather = bike_users_weather_df.loc[bike_users_weather_df['casual'].idxmax(), 'weathersit']
+    color_column = 'casual'
+    base_color = "#5975A4"
+    highlight_color = "#2E4E7E"
+
 st.metric("Peak weather", value=peak_weather)
 
 fig, ax = plt.subplots(figsize=(30, 10))
-if choice == 'All':
-    sns.barplot(x="weathersit", y="cnt", data=bike_users_weather_df,ax=ax)
-elif choice == 'Registered':
-    sns.barplot(x="weathersit", y="registered", data=bike_users_weather_df,ax=ax)
-else:
-    sns.barplot(x="weathersit", y="casual", data=bike_users_weather_df,ax=ax)
+colors = [highlight_color if weather == peak_weather else base_color for weather in bike_users_weather_df['weathersit']]
+
+sns.barplot(x="weathersit", y=color_column, data=bike_users_weather_df, palette=colors, ax=ax)
 
 ax.set_xlabel(None)
 ax.set_ylabel(None)
