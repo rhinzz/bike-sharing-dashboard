@@ -17,7 +17,7 @@ def create_bike_users_hourly_df(df):
         "casual": "sum",
         "registered": "sum",
         "cnt": "sum"
-    })
+    }).reset_index()
     return bike_users_hourly_df
 
 def create_bike_users_weekly_df(df):
@@ -95,7 +95,6 @@ for column in datetime_columns:
 st.header('Bike Sharing Dashboard :bicyclist:')
 st.subheader('Daily Trend')
 
-
 min_date = all_df["dteday"].min()
 max_date = all_df["dteday"].max()
 
@@ -107,7 +106,7 @@ with st.sidebar:
     )
     choice = st.radio(
     label="User Type:",
-    options=('Casual', 'Registered', 'All'),
+    options=('All', 'Registered', 'Casual'),
     horizontal=False
 )
 
@@ -165,5 +164,28 @@ ax.tick_params(axis='y', labelsize=20)
 ax.tick_params(axis='x', labelsize=20)
 
 st.pyplot(fig)
+
+st.subheader('Hourly Trend')
+if choice == 'All':
+    peak_hour = bike_users_hourly_df.loc[bike_users_hourly_df['cnt'].idxmax(), 'hr']
+elif choice == 'Registered':
+    peak_hour = bike_users_hourly_df.loc[bike_users_hourly_df['registered'].idxmax(), 'hr']
+else:
+    peak_hour = bike_users_hourly_df.loc[bike_users_hourly_df['casual'].idxmax(), 'hr']
+st.metric("Peak hour", value=peak_hour)
+
+fig, ax = plt.subplots(figsize=(30, 10))
+if choice == 'All':
+    sns.barplot(x="hr", y="cnt", data=bike_users_hourly_df,ax=ax)
+elif choice == 'Registered':
+    sns.barplot(x="hr", y="registered", data=bike_users_hourly_df,ax=ax)
+else:
+    sns.barplot(x="hr", y="casual", data=bike_users_hourly_df,ax=ax)
+    
+ax.tick_params(axis='y', labelsize=20)
+ax.tick_params(axis='x', labelsize=20)
+
+st.pyplot(fig)
+
 
 
