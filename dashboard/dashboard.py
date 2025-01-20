@@ -72,7 +72,7 @@ def create_bike_users_weather_df(df):
         "casual": "sum",
         "registered": "sum",
         "cnt": "sum"
-    })
+    }).reset_index()
     return bike_users_weather_df
 
 def create_bike_users_temp_df(df):
@@ -293,3 +293,34 @@ ax.tick_params(axis='y', labelsize=30)
 ax.tick_params(axis='x', labelsize=30)
 
 st.pyplot(fig)
+
+# Weather Trend
+st.subheader('Weather Trend')
+if choice == 'All':
+    peak_weather = bike_users_weather_df.loc[bike_users_weather_df['cnt'].idxmax(), 'weathersit']
+elif choice == 'Registered':
+    peak_weather = bike_users_weather_df.loc[bike_users_weather_df['registered'].idxmax(), 'weathersit']
+else:
+    peak_weather = bike_users_weather_df.loc[bike_users_season_df['casual'].idxmax(), 'weathersit']
+st.metric("Peak weather", value=peak_weather)
+
+fig, ax = plt.subplots(figsize=(30, 10))
+if choice == 'All':
+    sns.barplot(x="weathersit", y="cnt", data=bike_users_weather_df,ax=ax)
+elif choice == 'Registered':
+    sns.barplot(x="weathersit", y="registered", data=bike_users_weather_df,ax=ax)
+else:
+    sns.barplot(x="weathersit", y="casual", data=bike_users_weather_df,ax=ax)
+
+ax.set_xlabel(None)
+ax.set_ylabel(None)
+ax.tick_params(axis='y', labelsize=30)
+ax.tick_params(axis='x', labelsize=30)
+
+st.pyplot(fig)
+
+st.write("*Description :*")
+st.write("1 : Clear, Few clouds, Partly cloudy, Partly cloudy")
+st.write("2 : Mist + Cloudy, Mist + Broken clouds, Mist + Few clouds, Mist")
+st.write("3 : Light Snow, Light Rain + Thunderstorm + Scattered clouds, Light Rain + Scattered clouds")
+st.write("4 : Heavy Rain + Ice Pallets + Thunderstorm + Mist, Snow + Fog")
