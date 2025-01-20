@@ -6,9 +6,9 @@ sns.set_theme(style='dark')
 
 def create_bike_users_daily_df(df):
     bike_users_daily_df = df.groupby(by=['dteday']).agg({
-        "casual_day": "sum",
-        "registered_day": "sum",
-        "cnt": "sum"
+        "casual_day": "first",
+        "registered_day": "first",
+        "cnt_day": "first"
     }).reset_index()
     return bike_users_daily_df
 
@@ -105,6 +105,11 @@ with st.sidebar:
         max_value=max_date,
         value=[min_date, max_date]
     )
+    choice = st.radio(
+    label="User Type:",
+    options=('Casual', 'Registered', 'All'),
+    horizontal=False
+)
 
 main_df = all_df[(all_df["dteday"] >= str(start_date)) & 
                 (all_df["dteday"] <= str(end_date))]
@@ -123,17 +128,42 @@ with col1:
     st.metric("Total days", value=days)
 
 with col2:
-    bike_users = bike_users_daily_df.cnt.sum()
-    st.metric("Total bike users", value=bike_users)
+    if choice == 'Casual':
+        bike_users = bike_users_daily_df.casual_day.sum()
+        st.metric("Total bike users", value=bike_users)
+    elif choice == 'Registered':
+        bike_users = bike_users_daily_df.registered_day.sum()
+        st.metric("Total bike users", value=bike_users)
+    else:
+        bike_users = bike_users_daily_df.cnt_day.sum()
+        st.metric("Total bike users", value=bike_users)
 
+# Daily Trend
 fig, ax = plt.subplots(figsize=(30, 10))
-ax.plot(
-    bike_users_daily_df["dteday"],
-    bike_users_daily_df["cnt"],
-    linewidth=2.5,
-    color="#90CAF9"
-)
+if choice == 'Casual':
+    ax.plot(
+        bike_users_daily_df["dteday"],
+        bike_users_daily_df["casual_day"],
+        linewidth=2.5,
+        color="#90CAF9"
+    )
+elif choice == 'Registered':
+    ax.plot(
+        bike_users_daily_df["dteday"],
+        bike_users_daily_df["registered_day"],
+        linewidth=2.5,
+        color="#90CAF9"
+    )
+else:
+    ax.plot(
+        bike_users_daily_df["dteday"],
+        bike_users_daily_df["cnt_day"],
+        linewidth=2.5,
+        color="#90CAF9"
+    )
 ax.tick_params(axis='y', labelsize=20)
 ax.tick_params(axis='x', labelsize=20)
 
 st.pyplot(fig)
+
+
