@@ -8,6 +8,7 @@ def create_bike_users_daily_df(df):
     bike_users_daily_df = df.groupby(by=['dteday']).agg({
         "casual_day": "sum",
         "registered_day": "sum",
+        "cnt_day": "first"
     }).reset_index()
     return bike_users_daily_df
 
@@ -94,7 +95,7 @@ max_date = all_df["dteday"].max()
 
 with st.sidebar:
     start_date, end_date = st.date_input(
-        label='Rentang Waktu',min_value=min_date,
+        label='Date Range',min_value=min_date,
         max_value=max_date,
         value=[min_date, max_date]
     )
@@ -109,3 +110,7 @@ bike_users_weekly_df = create_bike_users_weekly_df(main_df)
 bike_users_monthly_df = create_bike_users_monthly_df(main_df)
 bike_users_working_day_df = create_bike_users_working_day_df(main_df)
 bike_users_holiday_df = create_bike_users_holiday_df(main_df)
+
+with st.columns:
+    bike_users = bike_users_daily_df.cnt_day.sum()
+    st.metric("Total bike users", value=bike_users)
