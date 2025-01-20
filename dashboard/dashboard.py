@@ -68,7 +68,7 @@ def create_bike_users_season_df(df):
     return bike_users_season_df
 
 def create_bike_users_weather_df(df):
-    bike_users_weather_df = df.groupby(by=['weather']).agg({
+    bike_users_weather_df = df.groupby(by=['weathersit']).agg({
         "casual": "sum",
         "registered": "sum",
         "cnt": "sum"
@@ -186,8 +186,8 @@ elif choice == 'Registered':
 else:
     sns.barplot(x="hr", y="casual", data=bike_users_hourly_df,ax=ax)
 
-ax.tick_params(axis='y', labelsize=20)
-ax.tick_params(axis='x', labelsize=20)
+ax.tick_params(axis='y', labelsize=30)
+ax.tick_params(axis='x', labelsize=30)
 
 st.pyplot(fig)
 
@@ -207,11 +207,36 @@ elif choice == 'Registered':
     sns.barplot(x="weekday", y="registered", data=bike_users_weekly_df,ax=ax)
 else:
     sns.barplot(x="weekday", y="casual", data=bike_users_weekly_df,ax=ax)
-    
-ax.tick_params(axis='y', labelsize=20)
-ax.tick_params(axis='x', labelsize=20)
+
+ax.set_xlabel(None)
+ax.set_ylabel(None)
+ax.tick_params(axis='y', labelsize=30)
+ax.tick_params(axis='x', labelsize=30)
 
 st.pyplot(fig)
 
+st.subheader('Bike Sharing Usage Based on Day Type')
+fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(30, 10))
+if choice == 'All':
+    sns.barplot(x="workingday", y="cnt", data=bike_users_working_day_df,ax=ax[0])
+    sns.barplot(x="holiday", y="cnt", data=bike_users_holiday_df,ax=ax[1])
+elif choice == 'Registered':
+    sns.barplot(x="workingday", y="registered", data=bike_users_working_day_df,ax=ax[0])
+    sns.barplot(x="holiday", y="registered", data=bike_users_holiday_df,ax=ax[1])
+else:
+    sns.barplot(x="workingday", y="casual", data=bike_users_working_day_df,ax=ax[0])
+    sns.barplot(x="holiday", y="casual", data=bike_users_holiday_df,ax=ax[1])
 
+ax[0].set_xlabel(None)
+ax[0].set_ylabel(None)
+ax[0].set_title("Working Day", loc="center", fontsize=50)
+ax[0].tick_params(axis='y', labelsize=35)
+ax[0].tick_params(axis='x', labelsize=30)
 
+ax[1].set_xlabel(None)
+ax[1].set_ylabel(None)
+ax[1].set_title("Holiday", loc="center", fontsize=50)
+ax[1].tick_params(axis='y', labelsize=35)
+ax[1].tick_params(axis='x', labelsize=30)
+
+st.pyplot(fig)
