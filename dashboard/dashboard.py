@@ -27,6 +27,20 @@ def create_bike_users_weekly_df(df):
     }).reindex(weekday_order)
     return weekly_users_daily_df
 
+def create_bike_users_monthly_df(df):
+    month = {
+        1: "January", 2: "February", 3: "March", 4: "April",
+        5: "May", 6: "June", 7: "July", 8: "August",
+        9: "September", 10: "October", 11: "November", 12: "December"
+    }
+    bike_users_monthly_df = df.groupby("mnth").agg({
+        "casual": "sum",
+        "registered": "sum",
+        "cnt": "sum"
+    }).reset_index()
+    bike_users_monthly_df["mnth"] = bike_users_monthly_df["mnth"].map(month)
+    return bike_users_monthly_df
+
 def create_bike_users_working_day(df):
     bike_users_working_day_df = df.groupby(by=['workingday']).agg({
         "casual": "sum",
