@@ -93,6 +93,8 @@ for column in datetime_columns:
     all_df[column] = pd.to_datetime(all_df[column])
 
 st.header('Bike Sharing Dashboard :bicyclist:')
+st.subheader('Daily Trend')
+
 
 min_date = all_df["dteday"].min()
 max_date = all_df["dteday"].max()
@@ -117,15 +119,21 @@ bike_users_holiday_df = create_bike_users_holiday_df(main_df)
 
 col1, col2 = st.columns(2)
 with col1:
+    days = len(main_df["dteday"].unique())
+    st.metric("Total days", value=days)
+
+with col2:
     bike_users = bike_users_daily_df.cnt.sum()
     st.metric("Total bike users", value=bike_users)
 
-fig, ax = plt.subplots(figsize=(20, 5))
+fig, ax = plt.subplots(figsize=(30, 10))
 ax.plot(
     bike_users_daily_df["dteday"],
     bike_users_daily_df["cnt"],
-    linewidth=2,
+    linewidth=2.5,
     color="#90CAF9"
 )
+ax.tick_params(axis='y', labelsize=20)
+ax.tick_params(axis='x', labelsize=20)
 
 st.pyplot(fig)
