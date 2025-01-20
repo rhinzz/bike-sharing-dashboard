@@ -64,7 +64,7 @@ def create_bike_users_season_df(df):
         "casual": "sum",
         "registered": "sum",
         "cnt": "sum"
-    })
+    }).reset_index()
     return bike_users_season_df
 
 def create_bike_users_weather_df(df):
@@ -169,6 +169,7 @@ ax.tick_params(axis='x', labelsize=20)
 
 st.pyplot(fig)
 
+# Hourly Trend
 st.subheader('Hourly Trend')
 if choice == 'All':
     peak_hour = bike_users_hourly_df.loc[bike_users_hourly_df['cnt'].idxmax(), 'hr']
@@ -191,6 +192,7 @@ ax.tick_params(axis='x', labelsize=30)
 
 st.pyplot(fig)
 
+# Weekly Trend
 st.subheader('Weekly Trend')
 if choice == 'All':
     peak_day = bike_users_weekly_df.loc[bike_users_weekly_df['cnt'].idxmax(), 'weekday']
@@ -215,6 +217,7 @@ ax.tick_params(axis='x', labelsize=30)
 
 st.pyplot(fig)
 
+# Monthly Trend
 st.subheader('Monthly Trend')
 if choice == 'All':
     peak_month = bike_users_monthly_df.loc[bike_users_monthly_df['cnt'].idxmax(), 'mnth']
@@ -239,6 +242,7 @@ ax.tick_params(axis='x', labelsize=30)
 
 st.pyplot(fig)
 
+# Day Type Trend
 st.subheader('Bike Sharing Usage Based on Day Type')
 fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(30, 10))
 if choice == 'All':
@@ -262,5 +266,30 @@ ax[1].set_ylabel(None)
 ax[1].set_title("Holiday", loc="center", fontsize=50)
 ax[1].tick_params(axis='y', labelsize=35)
 ax[1].tick_params(axis='x', labelsize=30)
+
+st.pyplot(fig)
+
+# Season Trend
+st.subheader('Seasonal Trend')
+if choice == 'All':
+    peak_season = bike_users_season_df.loc[bike_users_season_df['cnt'].idxmax(), 'season']
+elif choice == 'Registered':
+    peak_season = bike_users_season_df.loc[bike_users_season_df['registered'].idxmax(), 'season']
+else:
+    peak_season = bike_users_season_df.loc[bike_users_season_df['casual'].idxmax(), 'season']
+st.metric("Peak season", value=peak_season.capitalize())
+
+fig, ax = plt.subplots(figsize=(30, 10))
+if choice == 'All':
+    sns.barplot(x="season", y="cnt", data=bike_users_season_df,ax=ax)
+elif choice == 'Registered':
+    sns.barplot(x="season", y="registered", data=bike_users_season_df,ax=ax)
+else:
+    sns.barplot(x="season", y="casual", data=bike_users_season_df,ax=ax)
+
+ax.set_xlabel(None)
+ax.set_ylabel(None)
+ax.tick_params(axis='y', labelsize=30)
+ax.tick_params(axis='x', labelsize=30)
 
 st.pyplot(fig)
