@@ -11,7 +11,7 @@ def create_bike_users_daily_df(df):
     }).reset_index()
     return bike_users_daily_df
 
-def create_bike_users_hourly(df):
+def create_bike_users_hourly_df(df):
     bike_users_hourly_df = df.groupby(by=['hr']).agg({
         "casual": "sum",
         "registered": "sum",
@@ -41,7 +41,7 @@ def create_bike_users_monthly_df(df):
     bike_users_monthly_df["mnth"] = bike_users_monthly_df["mnth"].map(month)
     return bike_users_monthly_df
 
-def create_bike_users_working_day(df):
+def create_bike_users_working_day_df(df):
     bike_users_working_day_df = df.groupby(by=['workingday']).agg({
         "casual": "sum",
         "registered": "sum",
@@ -49,7 +49,7 @@ def create_bike_users_working_day(df):
     })
     return bike_users_working_day_df
 
-def create_bike_users_holiday(df):
+def create_bike_users_holiday_df(df):
     bike_users_holiday_df = df.groupby(by=['holiday']).agg({
         "casual": "sum",
         "registered": "sum",
@@ -57,7 +57,7 @@ def create_bike_users_holiday(df):
     })
     return bike_users_holiday_df
 
-def create_bike_users_season(df):
+def create_bike_users_season_df(df):
     bike_users_season_df = df.groupby(by=['season']).agg({
         "casual": "sum",
         "registered": "sum",
@@ -65,7 +65,7 @@ def create_bike_users_season(df):
     })
     return bike_users_season_df
 
-def create_bike_users_weather(df):
+def create_bike_users_weather_df(df):
     bike_users_weather_df = df.groupby(by=['weather']).agg({
         "casual": "sum",
         "registered": "sum",
@@ -73,7 +73,7 @@ def create_bike_users_weather(df):
     })
     return bike_users_weather_df
 
-def create_bike_users_temp(df):
+def create_bike_users_temp_df(df):
     bike_users_temp_df = df.groupby(by=['temp']).agg({
         "casual": "sum",
         "registered": "sum",
@@ -102,10 +102,3 @@ with st.sidebar:
 
 main_df = all_df[(all_df["dteday"] >= str(start_date)) & 
                 (all_df["dteday"] <= str(end_date))]
-
-daily_orders_df = create_daily_orders_df(main_df)
-sum_order_items_df = create_sum_order_items_df(main_df)
-bygender_df = create_bygender_df(main_df)
-byage_df = create_byage_df(main_df)
-bystate_df = create_bystate_df(main_df)
-rfm_df = create_rfm_df(main_df)
