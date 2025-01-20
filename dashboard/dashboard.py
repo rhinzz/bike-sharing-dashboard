@@ -4,6 +4,13 @@ import seaborn as sns
 import streamlit as st
 sns.set_theme(style='dark')
 
+def create_bike_users_daily_df(df):
+    bike_users_daily_df = df.groupby(by=['dteday']).agg({
+        "casual_day": "sum",
+        "registered_day": "sum",
+    }).reset_index()
+    return bike_users_daily_df
+
 def create_bike_users_hourly(df):
     bike_users_hourly_df = df.groupby(by=['hr']).agg({
         "casual": "sum",
@@ -11,13 +18,6 @@ def create_bike_users_hourly(df):
         "cnt": "sum"
     })
     return bike_users_hourly_df
-
-def create_bike_users_daily_df(df):
-    bike_users_daily_df = df.groupby(by=['dteday']).agg({
-        "casual_day": "sum",
-        "registered_day": "sum",
-    }).reset_index()
-    return bike_users_daily_df
 
 def create_bike_users_weekly_df(df):
     weekday_order = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
@@ -102,3 +102,10 @@ with st.sidebar:
 
 main_df = all_df[(all_df["dteday"] >= str(start_date)) & 
                 (all_df["dteday"] <= str(end_date))]
+
+daily_orders_df = create_daily_orders_df(main_df)
+sum_order_items_df = create_sum_order_items_df(main_df)
+bygender_df = create_bygender_df(main_df)
+byage_df = create_byage_df(main_df)
+bystate_df = create_bystate_df(main_df)
+rfm_df = create_rfm_df(main_df)
