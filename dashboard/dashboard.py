@@ -21,11 +21,11 @@ def create_bike_users_daily_df(df):
 
 def create_bike_users_weekly_df(df):
     weekday_order = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-    weekly_users_daily_df = df.groupby(by=['weekday']).agg({
+    bike_users_weekly_df = df.groupby(by=['weekday']).agg({
         "casual_day": "sum",
         "registered_day": "sum",
     }).reindex(weekday_order)
-    return weekly_users_daily_df
+    return bike_users_weekly_df
 
 def create_bike_users_monthly_df(df):
     month = {
@@ -81,6 +81,11 @@ def create_bike_users_temp(df):
     })
     return bike_users_temp_df
 
+all_df = pd.read_csv("all_data.csv")
+
+datetime_columns = ["dteday"]
+all_df.sort_values(by="dteday", inplace=True)
+all_df.reset_index(inplace=True)
 
 st.header('Bike Sharing Dashboard :bicyclist:')
 st.subheader('Total Users')
