@@ -8,7 +8,7 @@ def create_bike_users_daily_df(df):
     bike_users_daily_df = df.groupby(by=['dteday']).agg({
         "casual_day": "sum",
         "registered_day": "sum",
-        "cnt_day": "first"
+        "cnt": "sum"
     }).reset_index()
     return bike_users_daily_df
 
@@ -88,6 +88,10 @@ datetime_columns = ["dteday"]
 all_df.sort_values(by="dteday", inplace=True)
 all_df.reset_index(inplace=True)
 
+ 
+for column in datetime_columns:
+    all_df[column] = pd.to_datetime(all_df[column])
+
 st.header('Bike Sharing Dashboard :bicyclist:')
 
 min_date = all_df["dteday"].min()
@@ -111,6 +115,17 @@ bike_users_monthly_df = create_bike_users_monthly_df(main_df)
 bike_users_working_day_df = create_bike_users_working_day_df(main_df)
 bike_users_holiday_df = create_bike_users_holiday_df(main_df)
 
-with st.columns:
-    bike_users = bike_users_daily_df.cnt_day.sum()
+col1, col2 = st.columns(2)
+with col1:
+    bike_users = bike_users_daily_df.cnt.sum()
     st.metric("Total bike users", value=bike_users)
+
+fig, ax = plt.subplots(figsize=(20, 5))
+ax.plot(
+    bike_users_daily_df["dteday"],
+    bike_users_daily_df["cnt"],
+    linewidth=2,
+    color="#90CAF9"
+)
+
+st.pyplot(fig)
