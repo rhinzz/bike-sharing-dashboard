@@ -88,7 +88,6 @@ all_df.sort_values(by="dteday", inplace=True)
 all_df.reset_index(inplace=True)
 
 st.header('Bike Sharing Dashboard :bicyclist:')
-st.subheader('Total Users')
 
 min_date = all_df["dteday"].min()
 max_date = all_df["dteday"].max()
@@ -102,3 +101,11 @@ with st.sidebar:
 
 main_df = all_df[(all_df["dteday"] >= str(start_date)) & 
                 (all_df["dteday"] <= str(end_date))]
+
+
+bike_users_daily_df = create_bike_users_daily_df(main_df)
+bike_users_hourly_df = create_bike_users_hourly_df(main_df)
+bike_users_weekly_df = create_bike_users_weekly_df(main_df)
+bike_users_monthly_df = create_bike_users_monthly_df(main_df)
+bike_users_working_day_df = create_bike_users_working_day_df(main_df)
+bike_users_holiday_df = create_bike_users_holiday_df(main_df)
