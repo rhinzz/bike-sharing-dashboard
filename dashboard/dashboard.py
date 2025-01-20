@@ -81,7 +81,7 @@ def create_bike_users_temp(df):
     })
     return bike_users_temp_df
 
-all_df = pd.read_csv("all_data.csv")
+all_df = pd.read_csv("./dashboard/all_data.csv")
 
 datetime_columns = ["dteday"]
 all_df.sort_values(by="dteday", inplace=True)
