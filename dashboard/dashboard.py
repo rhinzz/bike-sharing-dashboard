@@ -99,3 +99,6 @@ with st.sidebar:
         max_value=max_date,
         value=[min_date, max_date]
     )
+
+main_df = all_df[(all_df["dteday"] >= str(start_date)) & 
+                (all_df["dteday"] <= str(end_date))]
